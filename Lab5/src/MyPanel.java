@@ -16,6 +16,9 @@ public class MyPanel extends JPanel {
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
+	public int BombSpawn = ((TOTAL_COLUMNS * (TOTAL_ROWS - 1)) / 5);
+	public int BombsOnMap = 0;
+	public boolean BombsArray[][] = new boolean[TOTAL_COLUMNS][TOTAL_ROWS];
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
 	public MyPanel() {   //This is the constructor... this code runs first to initialize
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
@@ -30,6 +33,22 @@ public class MyPanel extends JPanel {
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {   //The rest of the grid
 			for (int y = 0; y < TOTAL_ROWS - 1; y++) {
 				colorArray[x][y] = Color.WHITE;
+				BombsArray[x][y] = false;
+
+			}
+			System.out.println(BombSpawn);
+
+		}
+		while (BombsOnMap < BombSpawn) {
+			for (int x = 0; x < TOTAL_COLUMNS; x++) {
+				for (int y = 0; y < TOTAL_ROWS - 1; y++) {
+					int RandNum = new Random().nextInt(81);
+					if (RandNum == 47 && !BombsArray[x][y]) {
+						BombsArray[x][y] = true;
+						colorArray[x][y] = Color.BLACK;
+						BombsOnMap++;
+					}
+				}
 			}
 		}
 	}
@@ -62,9 +81,9 @@ public class MyPanel extends JPanel {
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS - 1; y++) {
-					Color c = colorArray[x][y];
-					g.setColor(c);
-					g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
+				Color c = colorArray[x][y];
+				g.setColor(c);
+				g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
 			}
 		}
 	}
