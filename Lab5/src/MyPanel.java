@@ -10,15 +10,17 @@ public class MyPanel extends JPanel {
 	private static final int GRID_X = 25;
 	private static final int GRID_Y = 25;
 	private static final int INNER_CELL_SIZE = 29;
-	private static final int TOTAL_COLUMNS = 9;
-	private static final int TOTAL_ROWS = 10;
+	public static final int TOTAL_COLUMNS = 9;
+	public static final int TOTAL_ROWS = 10;
 	public int x = -1;
 	public int y = -1;
 	public int mouseDownGridX = 0;
 	public int mouseDownGridY = 0;
 	public int BombSpawn = ((TOTAL_COLUMNS * (TOTAL_ROWS - 1)) / 5);
 	public int BombsOnMap = 0;
+	public int counter[][] = new int[TOTAL_COLUMNS][TOTAL_ROWS];
 	public boolean BombsArray[][] = new boolean[TOTAL_COLUMNS][TOTAL_ROWS];
+	public boolean GameOver = false;
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
 	public MyPanel() {   //This is the constructor... this code runs first to initialize
 		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
@@ -34,6 +36,7 @@ public class MyPanel extends JPanel {
 			for (int y = 0; y < TOTAL_ROWS - 1; y++) {
 				colorArray[x][y] = Color.WHITE;
 				BombsArray[x][y] = false;
+				counter[x][y] = -1;
 
 			}
 			System.out.println(BombSpawn);
@@ -82,10 +85,23 @@ public class MyPanel extends JPanel {
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS - 1; y++) {
 				Color c = colorArray[x][y];
+				if (counter[x][y] != -1) {
+					if (counter[x][y] == 0) {
+						c = Color.CYAN;
+					}
+					else {
+						c = Color.ORANGE;
+					}
+				}
 				g.setColor(c);
 				g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
 			}
 		}
+		if (GameOver) {
+			g.setColor(Color.MAGENTA);
+			g.drawString("Game Over!", (this.WIDTH / 2), 10);
+		}
+		
 	}
 	public int getGridX(int x, int y) {
 		Insets myInsets = getInsets();
