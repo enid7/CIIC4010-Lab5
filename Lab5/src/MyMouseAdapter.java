@@ -34,7 +34,26 @@ public class MyMouseAdapter extends MouseAdapter {
 			myPanel.repaint();
 			break;
 		case 3:		//Right mouse button
-			//Do nothing
+			//			Component C = e.getComponent();
+			//			while (!(C instanceof JFrame)) {
+			//				C = C.getParent();
+			//				if (C == null) {
+			//					return;
+			//				}
+			//			}
+			//			JFrame myFrame2 = (JFrame) C;
+			//			MyPanel myPanel2 = (MyPanel) myFrame2.getContentPane().getComponent(0);
+			//			Insets myInsets2 = myFrame2.getInsets();
+			//			int x2 = myInsets2.left;
+			//			int y2 = myInsets2.top;
+			//			e.translatePoint(-x2, -y2);
+			//			int x3 = e.getX();
+			//			int y3 = e.getY();
+			//			myPanel.x = x3;
+			//			myPanel.y = y3;
+			//			myPanel.mouseDownGridX = myPanel.getGridX(x3, y3);
+			//			myPanel.mouseDownGridY = myPanel.getGridY(x3, y3);
+			//			myPanel.repaint();
 			break;
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
@@ -91,8 +110,7 @@ public class MyMouseAdapter extends MouseAdapter {
 			}
 			break;
 		case 3:		//Right mouse button
-			//Do nothing
-			break;
+			
 		default:    //Some other button (2 = Middle mouse button, etc.)
 			//Do nothing
 			break;
@@ -101,24 +119,7 @@ public class MyMouseAdapter extends MouseAdapter {
 	private void surroundings(int n, int m, MyPanel myPanel) {
 		// TODO Auto-generated method stub
 		if (myPanel.counter[n][m] == -1) {
-		myPanel.counter[n][m] = 0;
-		for (int x = n-1; x <= n+1; x++) {
-			if (x < 0 || x >= myPanel.TOTAL_COLUMNS) {
-				continue;
-			}
-			for (int y = m-1; y <= m+1; y++) {
-				if (y < 0 || y >= myPanel.TOTAL_ROWS - 1) {
-					continue;
-				}
-				if (x == n && y == m) {
-					continue;
-				}
-				if (myPanel.BombsArray[x][y]) {
-					myPanel.counter[n][m]++;
-				}
-			}
-		}
-		if (myPanel.counter[n][m] == 0) {
+			myPanel.counter[n][m] = 0;
 			for (int x = n-1; x <= n+1; x++) {
 				if (x < 0 || x >= myPanel.TOTAL_COLUMNS) {
 					continue;
@@ -127,13 +128,30 @@ public class MyMouseAdapter extends MouseAdapter {
 					if (y < 0 || y >= myPanel.TOTAL_ROWS - 1) {
 						continue;
 					}
-					
+					if (x == n && y == m) {
+						continue;
+					}
+					if (myPanel.BombsArray[x][y]) {
+						myPanel.counter[n][m]++;
+					}
+				}
+			}
+			if (myPanel.counter[n][m] == 0) {
+				for (int x = n-1; x <= n+1; x++) {
+					if (x < 0 || x >= myPanel.TOTAL_COLUMNS) {
+						continue;
+					}
+					for (int y = m-1; y <= m+1; y++) {
+						if (y < 0 || y >= myPanel.TOTAL_ROWS - 1) {
+							continue;
+						}
+
 						surroundings(x, y, myPanel);
-					
+
+					}
 				}
 			}
 		}
-		}
-		
+
 	}
 }

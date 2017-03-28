@@ -86,11 +86,25 @@ public class MyPanel extends JPanel {
 			for (int y = 0; y < TOTAL_ROWS - 1; y++) {
 				Color c = colorArray[x][y];
 				if (counter[x][y] != -1) {
+					//No bombs
 					if (counter[x][y] == 0) {
 						c = Color.CYAN;
 					}
-					else {
+					//1 bomb
+					else if (counter[x][y] == 1) {
+						c = Color.GREEN;
+					}
+					//2 bombs
+					else if (counter[x][y] == 2) {
+						c = Color.YELLOW;
+					}
+					//3 bombs
+					else if (counter[x][y] == 3) {
 						c = Color.ORANGE;
+					}
+					//4+ bombs
+					else {
+						c = Color.RED;
 					}
 				}
 				g.setColor(c);
@@ -98,8 +112,8 @@ public class MyPanel extends JPanel {
 			}
 		}
 		if (GameOver) {
-			g.setColor(Color.MAGENTA);
-			g.drawString("Game Over!", (this.WIDTH / 2), 10);
+			g.setColor(Color.RED);
+			g.drawString("Game Over!", (this.WIDTH / 2) + 5, 15);
 		}
 		
 	}
