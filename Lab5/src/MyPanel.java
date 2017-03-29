@@ -19,17 +19,19 @@ public class MyPanel extends JPanel {
 	public int BombSpawn = ((TOTAL_COLUMNS * (TOTAL_ROWS - 1)) / 5);
 	public int BombsOnMap = 0;
 	public int counter[][] = new int[TOTAL_COLUMNS][TOTAL_ROWS];
+	public int NoBombSquare = 0;
 	public boolean BombsArray[][] = new boolean[TOTAL_COLUMNS][TOTAL_ROWS];
 	public boolean GameOver = false;
+	public boolean YouWin = false;
 	public Color[][] colorArray = new Color[TOTAL_COLUMNS][TOTAL_ROWS];
-	public MyPanel() {   //This is the constructor... this code runs first to initialize
-		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	//Use of "random" to prevent unwanted Eclipse warning
+	public MyPanel() {   
+		if (INNER_CELL_SIZE + (new Random()).nextInt(1) < 1) {	
 			throw new RuntimeException("INNER_CELL_SIZE must be positive!");
 		}
-		if (TOTAL_COLUMNS + (new Random()).nextInt(1) < 2) {	//Use of "random" to prevent unwanted Eclipse warning
+		if (TOTAL_COLUMNS + (new Random()).nextInt(1) < 2) {	
 			throw new RuntimeException("TOTAL_COLUMNS must be at least 2!");
 		}
-		if (TOTAL_ROWS + (new Random()).nextInt(1) < 3) {	//Use of "random" to prevent unwanted Eclipse warning
+		if (TOTAL_ROWS + (new Random()).nextInt(1) < 3) {	
 			throw new RuntimeException("TOTAL_ROWS must be at least 3!");
 		}
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {   //The rest of the grid
@@ -48,12 +50,12 @@ public class MyPanel extends JPanel {
 					int RandNum = new Random().nextInt(81);
 					if (RandNum == 47 && !BombsArray[x][y]) {
 						BombsArray[x][y] = true;
-						colorArray[x][y] = Color.BLACK;
 						BombsOnMap++;
 					}
 				}
 			}
 		}
+		NoBombSquare = (TOTAL_COLUMNS * (TOTAL_ROWS - 1)) - BombsOnMap;
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -81,41 +83,103 @@ public class MyPanel extends JPanel {
 			g.drawLine(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)), y1 + GRID_Y + ((INNER_CELL_SIZE + 1) * (TOTAL_ROWS - 1)));
 		}
 
+		if (NoBombSquare == 0) {
+			YouWin = true;
+		}
+		
 		//Paint cell colors
 		for (int x = 0; x < TOTAL_COLUMNS; x++) {
 			for (int y = 0; y < TOTAL_ROWS - 1; y++) {
 				Color c = colorArray[x][y];
-				if (counter[x][y] != -1) {
-					//No bombs
-					if (counter[x][y] == 0) {
-						c = Color.CYAN;
-					}
-					//1 bomb
-					else if (counter[x][y] == 1) {
-						c = Color.GREEN;
-					}
-					//2 bombs
-					else if (counter[x][y] == 2) {
-						c = Color.YELLOW;
-					}
-					//3 bombs
-					else if (counter[x][y] == 3) {
-						c = Color.ORANGE;
-					}
-					//4+ bombs
-					else {
-						c = Color.RED;
+				String string = "";
+				Color sc = Color.BLACK;
+
+				switch(counter[x][y])  {
+                case 0:
+                	string = "0";
+                	c= Color.GRAY;
+                	break;
+                case 1:
+                	string = "1";
+                	c= Color.GRAY;
+
+                	break;
+                case 2:
+                	string = "2";
+                	c= Color.GRAY;
+
+                	break;
+                case 3:
+                	string = "3";
+                	c= Color.GRAY;
+
+                	break;
+                case 4:
+                	string = "4";
+                	c= Color.GRAY;
+
+                	break;
+                case 5:
+                	string = "5";
+                	c= Color.GRAY;
+
+                	break;
+                case 6:
+                	string = "6";
+                	c= Color.GRAY;
+
+                	break;
+                case 7:
+                	string = "7";
+                	c= Color.GRAY;
+
+                	break;
+                case 8:
+                	string = "8";
+                	c= Color.GRAY;
+
+                	break;
+            }
+				if (GameOver) {
+					if (BombsArray[x][y]) {
+						c = Color.BLACK;
 					}
 				}
+				if (YouWin) {
+					if (BombsArray[x][y]) {
+						c = Color.BLACK;
+							}
+						}
 				g.setColor(c);
 				g.fillRect(x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 1, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 1, INNER_CELL_SIZE, INNER_CELL_SIZE);
+				g.setColor(sc);
+				g.drawString(string, x1 + GRID_X + (x * (INNER_CELL_SIZE + 1)) + 10, y1 + GRID_Y + (y * (INNER_CELL_SIZE + 1)) + 20);
 			}
 		}
+		
+		if (NoBombSquare == 0) {
+			YouWin = true;
+		}
+		
 		if (GameOver) {
 			g.setColor(Color.RED);
 			g.drawString("Game Over!", (this.WIDTH / 2) + 5, 15);
 		}
+		if (YouWin) {
+			g.setColor(Color.BLUE);
+			g.drawString("You Win!", (this.WIDTH / 2) + 5, 15);
+			
+		}
 		
+	}
+	public void showMine(){
+		for (int XX = 0; XX < TOTAL_COLUMNS; XX++) {
+			for (int YY = 0; YY < TOTAL_ROWS - 1; YY++) {
+				if (BombsArray[XX][YY]) {
+					colorArray[XX][YY] = Color.BLACK;
+				}
+			}
+	}
 	}
 	public int getGridX(int x, int y) {
 		Insets myInsets = getInsets();
